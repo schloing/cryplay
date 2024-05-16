@@ -28,16 +28,19 @@ void setup() {
 
     esp_event_loop_init(event_handler, NULL);
 
-    char* ssid = "carplay_wap";
-    char* pwrd = "carplay_wap";
+    unsigned char ssid[32] = "carplay_wap";
+    unsigned char pwrd[64] = "carplay_wap";
+
+    wifi_ap_config_t ap_config;
+    
+    memcpy(&ap_config.ssid, &ssid, 32);
+    memcpy(&ap_config.password, &pwrd, 64);
+
+    ap_config.max_connection = 4;
+    ap_config.authmode = WIFI_AUTH_WPA_WPA2_PSK;
 
     wifi_config_t wifi_config = {
-        .ap = {
-            .ssid = ssid,
-            .password = pwrd,
-            .max_connection = 4,
-            .authmode = WIFI_AUTH_WPA_WPA2_PSK
-        }
+      .ap = ap_config,
     };
 
     esp_wifi_set_mode(WIFI_MODE_AP);
